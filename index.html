@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editor de Manchetes</title>
+    <style>
+        /* estilo geral da página */
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            display: flex; /* coloca editor e preview lado a lado */
+            justify-content: center;
+            gap: 20px;
+            background: #f5f5f5;
+        }
+
+        /* divs principais */
+        .editor, .preview {
+            width: 800px; /* tamanho pedido no trabalho */
+            padding: 20px;
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        label {
+            font-weight: bold;
+            display: block;
+            margin: 10px 0 5px;
+        }
+
+        input {
+            width: 80%;
+            padding: 8px;
+            margin-bottom: 15px;
+        }
+
+        .card {
+            border: 2px solid #333;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+
+        .preview img {
+            width: 100%;
+            max-height: 300px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Área do Editor -->
+    <div class="editor">
+        <h1>Editor</h1>
+
+        <!-- Escolher imagem -->
+        <label for="imagemInput">Imagem da notícia</label>
+        <input type="file" id="imagemInput" accept="image/*">
+
+        <!-- Cores -->
+        <label for="Cor_de_fundo">Cor de fundo</label>
+        <input type="color" id="Cor_de_fundo" value="#ffffff">
+
+        <label for="Cor_do_texto">Cor do texto</label>
+        <input type="color" id="Cor_do_texto" value="#000000">
+
+        <label for="Cor_da_borda">Cor da borda dos cards</label>
+        <input type="color" id="Cor_da_borda" value="#333333">
+
+        <!-- Título principal -->
+        <label for="tituloPrincipal">Título principal</label>
+        <input type="text" id="tituloPrincipal" placeholder="Digite o título principal">
+
+        <!-- Cards -->
+        <h3>Cards de Manchete</h3>
+
+        <label for="card1Titulo">Card 1 - Título</label>
+        <input type="text" id="card1Titulo" placeholder="Título do card 1">
+
+        <label for="card1Sub">Card 1 - Subtítulo</label>
+        <input type="text" id="card1Sub" placeholder="Subtítulo do card 1">
+
+        <label for="card2Titulo">Card 2 - Título</label>
+        <input type="text" id="card2Titulo" placeholder="Título do card 2">
+
+        <label for="card2Sub">Card 2 - Subtítulo</label>
+        <input type="text" id="card2Sub" placeholder="Subtítulo do card 2">
+    </div>
+
+    <!-- Área da Visualização -->
+    <div class="preview" id="preview">
+        <h1 id="previewTitulo">Sua Manchete Aqui</h1>
+        <img id="previewImg" src="" alt="">
+
+        <div class="card" id="card1">
+            <h2 id="previewCard1Titulo">Título do Card 1</h2>
+            <p id="previewCard1Sub">Subtítulo do Card 1</p>
+        </div>
+
+        <div class="card" id="card2">
+            <h2 id="previewCard2Titulo">Título do Card 2</h2>
+            <p id="previewCard2Sub">Subtítulo do Card 2</p>
+        </div>
+    </div>
+
+    <script>
+        // Seleciona os elementos
+        let imagemInput = document.querySelector("#imagemInput");
+        let previewImg = document.querySelector("#previewImg");
+
+        let Cordefundo = document.querySelector("#Cordefundo");
+        let Cor_do_texto = document.querySelector("#Cor_do_texto");
+        let Cor_da_borda = document.querySelector("#Cor_da_borda");
+
+        let tituloPrincipal = document.querySelector("#tituloPrincipal");
+        let previewTitulo = document.querySelector("#previewTitulo");
+
+        // inputs dos cards
+        let card1Titulo = document.querySelector("#card1Titulo");
+        let card1Sub = document.querySelector("#card1Sub");
+        let card2Titulo = document.querySelector("#card2Titulo");
+        let card2Sub = document.querySelector("#card2Sub");
+
+        let previewCard1Titulo = document.querySelector("#previewCard1Titulo");
+        let previewCard1Sub = document.querySelector("#previewCard1Sub");
+        let previewCard2Titulo = document.querySelector("#previewCard2Titulo");
+        let previewCard2Sub = document.querySelector("#previewCard2Sub");
+
+        // Função que trocar imagem
+        imagemInput.addEventListener("change", e => {
+            let arquivo = e.target.files[0];
+            if (!arquivo) return;
+            let reader = new FileReader();
+            reader.onload = () => previewImg.src = reader.result;
+            reader.readAsDataURL(arquivo);
+        });
+
+        // Funções que alterar cores
+        Cor_de_fundo.addEventListener("input", e => {
+            document.querySelector(".preview").style.background = e.target.value;
+        });
+
+        Cor_do_texto.addEventListener("input", e => {
+            document.querySelector(".preview").style.color = e.target.value;
+        });
+
+        Cor_da_borda.addEventListener("input", e => {
+            document.querySelectorAll(".card").forEach(card => {
+                card.style.borderColor = e.target.value;
+            });
+        });
+
+        // Funções para alterar textos
+        tituloPrincipal.addEventListener("input", e => {
+            previewTitulo.textContent = e.target.value || "Sua Manchete Aqui";
+        });
+
+        card1Titulo.addEventListener("input", e => {
+            previewCard1Titulo.textContent = e.target.value || "Título do Card 1";
+        });
+
+        card1Sub.addEventListener("input", e => {
+            previewCard1Sub.textContent = e.target.value || "Subtítulo do Card 1";
+        });
+
+        card2Titulo.addEventListener("input", e => {
+            previewCard2Titulo.textContent = e.target.value || "Título do Card 2";
+        });
+
+        card2Sub.addEventListener("input", e => {
+            previewCard2Sub.textContent = e.target.value || "Subtítulo do Card 2";
+        });
+    </script>
+</body>
+</html>
